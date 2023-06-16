@@ -1,5 +1,5 @@
-# boost-asio-gnutls
-GnuTLS wrapper for Boost.Asio
+# asio-gnutls
+GnuTLS wrapper for Asio standalone
 
 ## Usage
 
@@ -10,7 +10,7 @@ The two classes `context` and `stream` in `asio::gnutls` mimic the ones in `asio
 
 ## Test
 
-From the boost root directory, run:
+From the asio root directory, run:
 ```
 b2 [PATH_TO_THIS_REPOSITORY]/test/gnutls
 ```
