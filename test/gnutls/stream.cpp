@@ -9,16 +9,16 @@
 //
 
 // Disable autolinking for unit tests.
-#if !defined(BOOST_ALL_NO_LIB)
-#define BOOST_ALL_NO_LIB 1
-#endif // !defined(BOOST_ALL_NO_LIB)
+#if !defined(ALL_NO_LIB)
+#define ALL_NO_LIB 1
+#endif // !defined(ALL_NO_LIB)
 
 // Test that header file is self-contained.
-#include <boost/asio/gnutls/stream.hpp>
+#include <asio/gnutls/stream.hpp>
 
 #include "../unit_test.hpp"
-#include <boost/asio.hpp>
-#include <boost/asio/gnutls.hpp>
+#include <asio.hpp>
+#include <asio/gnutls.hpp>
 
 //------------------------------------------------------------------------------
 
@@ -29,22 +29,22 @@
 
 namespace gnutls_stream_compile {
 
-bool verify_callback(bool, boost::asio::gnutls::verify_context&) { return false; }
+bool verify_callback(bool, asio::gnutls::verify_context&) { return false; }
 
-void handshake_handler(const boost::system::error_code&) {}
+void handshake_handler(const std::error_code&) {}
 
-void buffered_handshake_handler(const boost::system::error_code&, std::size_t) {}
+void buffered_handshake_handler(const std::error_code&, std::size_t) {}
 
-void shutdown_handler(const boost::system::error_code&) {}
+void shutdown_handler(const std::error_code&) {}
 
-void write_some_handler(const boost::system::error_code&, std::size_t) {}
+void write_some_handler(const std::error_code&, std::size_t) {}
 
-void read_some_handler(const boost::system::error_code&, std::size_t) {}
+void read_some_handler(const std::error_code&, std::size_t) {}
 
 void test()
 {
-  using namespace boost::asio;
-  namespace ip = boost::asio::ip;
+  using namespace asio;
+  namespace ip = asio::ip;
 
   try
   {
@@ -52,8 +52,8 @@ void test()
     char mutable_char_buffer[128] = "";
     const char const_char_buffer[128] = "";
     std::string hostname = "hostname";
-    boost::asio::gnutls::context context(boost::asio::gnutls::context::tls);
-    boost::system::error_code ec;
+    asio::gnutls::context context(asio::gnutls::context::tls);
+    std::error_code ec;
 
     // gnutls::stream constructors.
 
@@ -146,4 +146,4 @@ void test()
 
 //------------------------------------------------------------------------------
 
-BOOST_ASIO_TEST_SUITE("gnutls/stream", BOOST_ASIO_TEST_CASE(gnutls_stream_compile::test))
+ASIO_TEST_SUITE("gnutls/stream", ASIO_TEST_CASE(gnutls_stream_compile::test))

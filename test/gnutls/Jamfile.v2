@@ -19,16 +19,16 @@ lib ipv6 ; # HPUX
 lib network ; # HAIKU
 
 local USE_SELECT =
-  <define>BOOST_ASIO_DISABLE_EPOLL
-  <define>BOOST_ASIO_DISABLE_KQUEUE
-  <define>BOOST_ASIO_DISABLE_IOCP
+  <define>ASIO_DISABLE_EPOLL
+  <define>ASIO_DISABLE_KQUEUE
+  <define>ASIO_DISABLE_IOCP
   ;
 
 project
   : requirements
     <include>../../include
-    <library>/boost/system//boost_system
-    <define>BOOST_ALL_NO_LIB=1
+    <library>/boost/system//system
+    <define>ALL_NO_LIB=1
     <threading>multi
     <target-os>solaris:<library>socket
     <target-os>solaris:<library>nsl

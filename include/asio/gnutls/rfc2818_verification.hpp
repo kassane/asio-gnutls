@@ -8,12 +8,12 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef BOOST_ASIO_GNUTLS_RFC2818_VERIFICATION_HPP
-#define BOOST_ASIO_GNUTLS_RFC2818_VERIFICATION_HPP
+#ifndef ASIO_GNUTLS_RFC2818_VERIFICATION_HPP
+#define ASIO_GNUTLS_RFC2818_VERIFICATION_HPP
 
-#include <boost/asio/gnutls/host_name_verification.hpp>
+#include <asio/gnutls/host_name_verification.hpp>
 
-namespace boost {
+
 namespace asio {
 namespace gnutls {
 
@@ -23,6 +23,6 @@ using rfc2818_verification = host_name_verification;
 
 } // namespace gnutls
 } // namespace asio
-} // namespace boost
 
-#endif // BOOST_ASIO_GNUTLS_RFC2818_VERIFICATION_HPP
+
+#endif // ASIO_GNUTLS_RFC2818_VERIFICATION_HPP

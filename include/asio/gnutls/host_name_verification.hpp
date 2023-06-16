@@ -8,16 +8,16 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef BOOST_ASIO_GNUTLS_HOST_NAME_VERIFICATION_HPP
-#define BOOST_ASIO_GNUTLS_HOST_NAME_VERIFICATION_HPP
+#ifndef ASIO_GNUTLS_HOST_NAME_VERIFICATION_HPP
+#define ASIO_GNUTLS_HOST_NAME_VERIFICATION_HPP
 
-#include <boost/asio/gnutls/verify_context.hpp>
+#include <asio/gnutls/verify_context.hpp>
 
 #include <gnutls/x509.h>
 
 #include <string>
 
-namespace boost {
+
 namespace asio {
 namespace gnutls {
 
@@ -48,6 +48,6 @@ private:
 
 } // namespace gnutls
 } // namespace asio
-} // namespace boost
 
-#endif // BOOST_ASIO_GNUTLS_HOST_NAME_VERIFICATION_HPP
+
+#endif // ASIO_GNUTLS_HOST_NAME_VERIFICATION_HPP

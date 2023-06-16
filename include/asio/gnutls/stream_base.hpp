@@ -8,12 +8,12 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef BOOST_ASIO_GNUTLS_STREAM_BASE_HPP
-#define BOOST_ASIO_GNUTLS_STREAM_BASE_HPP
+#ifndef ASIO_GNUTLS_STREAM_BASE_HPP
+#define ASIO_GNUTLS_STREAM_BASE_HPP
 
 #include "context.hpp"
 
-#include <boost/system/error_code.hpp>
+#include <system_error>
 
 #include <gnutls/gnutls.h>
 
@@ -21,14 +21,14 @@
 #include <memory>
 #include <string>
 
-namespace boost {
+
 namespace asio {
 namespace gnutls {
 
 class stream_base
 {
 public:
-    using error_code = boost::system::error_code;
+    using error_code = std::error_code;
     using native_handle_type = gnutls_session_t;
 
     enum handshake_type
@@ -55,7 +55,7 @@ public:
 
     virtual native_handle_type native_handle() = 0;
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     virtual void set_host_name(std::string const& name) = 0;
 #endif
     virtual error_code set_host_name(std::string const& name, error_code& ec) = 0;
@@ -66,6 +66,6 @@ protected:
 
 } // namespace gnutls
 } // namespace asio
-} // namespace boost
+
 
 #endif

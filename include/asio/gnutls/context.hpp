@@ -8,19 +8,17 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef BOOST_ASIO_GNUTLS_CONTEXT_HPP
-#define BOOST_ASIO_GNUTLS_CONTEXT_HPP
+#ifndef ASIO_GNUTLS_CONTEXT_HPP
+#define ASIO_GNUTLS_CONTEXT_HPP
 
 #include "context_base.hpp"
 #include "error.hpp"
 #include "verify_context.hpp"
 
-#include <boost/asio.hpp>
-#include <boost/asio/buffer.hpp>
+#include <asio.hpp>
+#include <asio/buffer.hpp>
 
-#ifndef BOOST_NO_EXCEPTIONS
-#include <boost/system/system_error.hpp>
-#endif
+#include <system_error>
 
 #include <gnutls/gnutls.h>
 
@@ -30,14 +28,14 @@
 #include <string>
 #include <utility>
 
-namespace boost {
+
 namespace asio {
 namespace gnutls {
 
 class stream_base;
 template <typename next_layer_type> class stream;
 
-using const_buffer = boost::asio::const_buffer;
+using const_buffer = asio::const_buffer;
 
 class context : public context_base
 {
@@ -67,7 +65,7 @@ public:
 
     native_handle_type native_handle() { return m_impl->cred; }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void set_options(options opts)
     {
         error_code ec;
@@ -81,7 +79,7 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void clear_options()
     {
         error_code ec;
@@ -91,12 +89,12 @@ public:
 
     void clear_options(error_code& ec) { m_impl->opts = 0; }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void set_default_verify_paths()
     {
         error_code ec;
         set_default_verify_paths(ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -108,7 +106,7 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void set_verify_mode(verify_mode v)
     {
         error_code ec;
@@ -122,7 +120,7 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void set_verify_depth(int depth)
     {
         error_code ec;
@@ -138,7 +136,7 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     template <typename VerifyCallback> void set_verify_callback(VerifyCallback callback)
     {
         error_code ec;
@@ -153,12 +151,12 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     template <typename PasswordCallback> void set_password_callback(PasswordCallback callback)
     {
         error_code ec;
         set_password_callback(callback, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -169,12 +167,12 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void use_certificate_file(std::string const& filename, file_format format)
     {
         error_code ec;
         use_certificate_file(filename, format, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -184,19 +182,19 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void use_private_key_file(std::string const& filename, file_format format)
     {
         error_code ec;
         use_private_key_file(filename, format, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
     error_code use_private_key_file(std::string const& filename, file_format format, error_code& ec)
     {
         if (m_impl->certificate_file.empty())
-            return ec = boost::asio::error::operation_not_supported;
+            return ec = asio::error::operation_not_supported;
 
         std::size_t const max_len = 256;
         std::string pass;
@@ -214,12 +212,12 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void use_tmp_dh_file(std::string const& filename)
     {
         error_code ec;
         use_tmp_dh_file(filename, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -230,12 +228,12 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void use_certificate(const_buffer const& certificate, file_format format)
     {
         error_code ec;
         use_certificate(certificate, format, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -246,18 +244,18 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void use_private_key(const_buffer const& private_key, file_format format)
     {
         error_code ec;
         use_private_key(private_key, format, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
     error_code use_private_key(const_buffer const& private_key, file_format format, error_code& ec)
     {
-        if (m_impl->certificate.empty()) return ec = boost::asio::error::operation_not_supported;
+        if (m_impl->certificate.empty()) return ec = asio::error::operation_not_supported;
 
         m_impl->private_key.assign(reinterpret_cast<char const*>(private_key.data()),
                                    private_key.size());
@@ -283,12 +281,12 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void load_verify_file(std::string const& ca_file)
     {
         error_code ec;
         load_verify_file(ca_file, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -300,12 +298,12 @@ public:
         if (ret < 0) ec = error_code(ret, error::get_ssl_category());
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void add_verify_path(std::string const& dir)
     {
         error_code ec;
         add_verify_path(dir, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -317,12 +315,12 @@ public:
         if (ret < 0) ec = error_code(ret, error::get_ssl_category());
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void use_tmp_dh(const_buffer const& dh)
     {
         error_code ec;
         use_tmp_dh(dh, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -335,12 +333,12 @@ public:
 
     // ---------- SNI extension ----------
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void set_server_name_callback(std::function<bool(stream_base& s, std::string name)> cb)
     {
         error_code ec;
         set_server_name_callback(cb, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 
 #endif
@@ -397,8 +395,8 @@ private:
 
 } // namespace gnutls
 } // namespace asio
-} // namespace boost
 
-#include <boost/asio/gnutls/stream_base.hpp>
+
+#include <asio/gnutls/stream_base.hpp>
 
 #endif

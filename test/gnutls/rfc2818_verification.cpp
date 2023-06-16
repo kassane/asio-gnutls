@@ -9,13 +9,13 @@
 //
 
 // Disable autolinking for unit tests.
-#if !defined(BOOST_ALL_NO_LIB)
-#define BOOST_ALL_NO_LIB 1
-#endif // !defined(BOOST_ALL_NO_LIB)
+#if !defined(ALL_NO_LIB)
+#define ALL_NO_LIB 1
+#endif // !defined(ALL_NO_LIB)
 
 // Test that header file is self-contained.
-#include <boost/asio/gnutls/rfc2818_verification.hpp>
+#include <asio/gnutls/rfc2818_verification.hpp>
 
 #include "../unit_test.hpp"
 
-BOOST_ASIO_TEST_SUITE("gnutls/rfc2818_verification", BOOST_ASIO_TEST_CASE(null_test))
+ASIO_TEST_SUITE("gnutls/rfc2818_verification", ASIO_TEST_CASE(null_test))

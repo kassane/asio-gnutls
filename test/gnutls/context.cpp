@@ -9,12 +9,12 @@
 //
 
 // Disable autolinking for unit tests.
-#if !defined(BOOST_ALL_NO_LIB)
-#define BOOST_ALL_NO_LIB 1
-#endif // !defined(BOOST_ALL_NO_LIB)
+#if !defined(ALL_NO_LIB)
+#define ALL_NO_LIB 1
+#endif // !defined(ALL_NO_LIB)
 
 // Test that header file is self-contained.
-#include <boost/asio/gnutls/context.hpp>
+#include <asio/gnutls/context.hpp>
 
 #include "../unit_test.hpp"
 
@@ -27,18 +27,18 @@
 
 namespace gnutls_context_compile {
 
-bool verify_callback(bool, boost::asio::gnutls::verify_context&) { return false; }
+bool verify_callback(bool, asio::gnutls::verify_context&) { return false; }
 
-bool server_name_callback(boost::asio::gnutls::stream_base& s, std::string name) { return false; }
+bool server_name_callback(asio::gnutls::stream_base& s, std::string name) { return false; }
 
 void test()
 {
-    using namespace boost::asio;
+    using namespace asio;
 
     try
     {
-        boost::asio::gnutls::context context(boost::asio::gnutls::context::tls);
-        boost::system::error_code ec;
+        asio::gnutls::context context(asio::gnutls::context::tls);
+        std::error_code ec;
 
         context.set_verify_mode(gnutls::context::verify_none);
         context.set_verify_mode(gnutls::context::verify_none, ec);
@@ -62,4 +62,4 @@ void test()
 
 //------------------------------------------------------------------------------
 
-BOOST_ASIO_TEST_SUITE("gnutls/context", BOOST_ASIO_TEST_CASE(gnutls_context_compile::test))
+ASIO_TEST_SUITE("gnutls/context", ASIO_TEST_CASE(gnutls_context_compile::test))

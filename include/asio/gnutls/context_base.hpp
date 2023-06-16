@@ -8,15 +8,13 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef BOOST_ASIO_GNUTLS_CONTEXT_BASE_HPP
-#define BOOST_ASIO_GNUTLS_CONTEXT_BASE_HPP
+#ifndef ASIO_GNUTLS_CONTEXT_BASE_HPP
+#define ASIO_GNUTLS_CONTEXT_BASE_HPP
 
-#include <boost/asio.hpp>
-#include <boost/system/error_code.hpp>
-
+#include <asio.hpp>
+#include <system_error> // Include the STL version of error_code
 #include <gnutls/gnutls.h>
 
-namespace boost {
 namespace asio {
 namespace gnutls {
 
@@ -25,15 +23,15 @@ template <typename next_layer_type> class stream;
 
 typedef int verify_mode;
 
-BOOST_ASIO_STATIC_CONSTANT(int, verify_none = 0x00);
-BOOST_ASIO_STATIC_CONSTANT(int, verify_peer = 0x01);
-BOOST_ASIO_STATIC_CONSTANT(int, verify_fail_if_no_peer_cert = 0x02);
-BOOST_ASIO_STATIC_CONSTANT(int, verify_client_once = 0x04); // Ignored
+constexpr int verify_none = 0x00;
+constexpr int verify_peer = 0x01;
+constexpr int verify_fail_if_no_peer_cert = 0x02;
+constexpr int verify_client_once = 0x04; // Ignored
 
 class context_base
 {
 public:
-    using error_code = boost::system::error_code;
+    using error_code = std::error_code; // Use the STL version of error_code
     using native_handle_type = gnutls_certificate_credentials_t;
 
     enum method : int
@@ -69,24 +67,22 @@ public:
         der
     };
 
-    typedef long options;
+    using options = long;
 
-    BOOST_ASIO_STATIC_CONSTANT(long, default_workarounds = 0x01);
-    BOOST_ASIO_STATIC_CONSTANT(long, single_dh_use = 0x02);       // Ignored
-    BOOST_ASIO_STATIC_CONSTANT(long, no_sslv2 = 0x04);            // Ignored, always disabled
-    BOOST_ASIO_STATIC_CONSTANT(long, no_sslv3 = 0x08);
+    constexpr static long default_workarounds = 0x01;
+    constexpr static long single_dh_use = 0x02;       // Ignored
+    constexpr static long no_sslv2 = 0x04;            // Ignored, always disabled
+    constexpr static long no_sslv3 = 0x08;
 
     using verify_mode = gnutls::verify_mode;
 
-    BOOST_ASIO_STATIC_CONSTANT(int, verify_none = gnutls::verify_none);
-    BOOST_ASIO_STATIC_CONSTANT(int, verify_peer = gnutls::verify_peer);
-    BOOST_ASIO_STATIC_CONSTANT(int,
-                               verify_fail_if_no_peer_cert = gnutls::verify_fail_if_no_peer_cert);
-    BOOST_ASIO_STATIC_CONSTANT(int, verify_client_once = gnutls::verify_client_once);
+    constexpr static int verify_none = gnutls::verify_none;
+    constexpr static int verify_peer = gnutls::verify_peer;
+    constexpr static int verify_fail_if_no_peer_cert = gnutls::verify_fail_if_no_peer_cert;
+    constexpr static int verify_client_once = gnutls::verify_client_once;
 };
 
 } // namespace gnutls
 } // namespace asio
-} // namespace boost
 
 #endif

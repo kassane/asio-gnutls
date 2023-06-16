@@ -8,15 +8,15 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef BOOST_ASIO_GNUTLS_STREAM_HPP
-#define BOOST_ASIO_GNUTLS_STREAM_HPP
+#ifndef ASIO_GNUTLS_STREAM_HPP
+#define ASIO_GNUTLS_STREAM_HPP
 
 #include "context.hpp"
 #include "stream_base.hpp"
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
 #include <boost/system/system_error.hpp>
 #endif
 
@@ -30,7 +30,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace boost {
+
 namespace asio {
 namespace gnutls {
 
@@ -41,7 +41,7 @@ public:
     using lowest_layer_type =
         typename std::remove_reference<next_layer_type>::type::lowest_layer_type;
     using executor_type = typename std::remove_reference<next_layer_type>::type::executor_type;
-    using io_context = boost::asio::io_context;
+    using io_context = asio::io_context;
 
     template <typename Arg>
     stream(Arg&& arg, context& ctx)
@@ -82,7 +82,7 @@ public:
 
     native_handle_type native_handle() { return m_impl->session; }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void set_verify_mode(verify_mode v)
     {
         error_code ec;
@@ -97,7 +97,7 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void set_verify_depth(int depth)
     {
         error_code ec;
@@ -108,7 +108,7 @@ public:
     // Warning: ignored
     error_code set_verify_depth(int, error_code& ec) { return ec; }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     template <typename VerifyCallback> void set_verify_callback(VerifyCallback callback)
     {
         error_code ec;
@@ -124,18 +124,18 @@ public:
     }
 
     template <typename HandshakeHandler>
-    BOOST_ASIO_INITFN_RESULT_TYPE(HandshakeHandler, void(error_code))
+    ASIO_INITFN_RESULT_TYPE(HandshakeHandler, void(error_code))
     async_handshake(handshake_type type, HandshakeHandler&& handler)
     {
         // If you get an error on the following line it means that your handler does
         // not meet the documented type requirements for a HandshakeHandler.
-        BOOST_ASIO_HANDSHAKE_HANDLER_CHECK(HandshakeHandler, handler) type_check;
+        ASIO_HANDSHAKE_HANDLER_CHECK(HandshakeHandler, handler) type_check;
 
         async_callable<HandshakeHandler, error_code> callable(std::move(handler));
 
         if (m_impl->handshake_handler || m_impl->is_handshake_done)
         {
-            post(get_executor(), std::bind(callable, boost::asio::error::operation_not_supported));
+            post(get_executor(), std::bind(callable, asio::error::operation_not_supported));
             return;
         }
 
@@ -154,14 +154,14 @@ public:
     }
 
     template <typename ConstBufferSequence, typename BufferedHandshakeHandler>
-    BOOST_ASIO_INITFN_RESULT_TYPE(BufferedHandshakeHandler, void(error_code, std::size_t))
+    ASIO_INITFN_RESULT_TYPE(BufferedHandshakeHandler, void(error_code, std::size_t))
     async_handshake(handshake_type type,
                     const ConstBufferSequence& buffers,
                     BufferedHandshakeHandler&& handler)
     {
         // If you get an error on the following line it means that your handler does
         // not meet the documented type requirements for a BufferedHandshakeHandler.
-        BOOST_ASIO_BUFFERED_HANDSHAKE_HANDLER_CHECK(BufferedHandshakeHandler, handler) type_check;
+        ASIO_BUFFERED_HANDSHAKE_HANDLER_CHECK(BufferedHandshakeHandler, handler) type_check;
 
         async_callable<BufferedHandshakeHandler, error_code, std::size_t> callable(
             std::move(handler));
@@ -171,18 +171,18 @@ public:
     }
 
     template <typename ShutdownHandler>
-    BOOST_ASIO_INITFN_RESULT_TYPE(ShutdownHandler, void(error_code))
+    ASIO_INITFN_RESULT_TYPE(ShutdownHandler, void(error_code))
     async_shutdown(ShutdownHandler&& handler)
     {
         // If you get an error on the following line it means that your handler does
         // not meet the documented type requirements for a ShutdownHandler.
-        BOOST_ASIO_SHUTDOWN_HANDLER_CHECK(ShutdownHandler, handler) type_check;
+        ASIO_SHUTDOWN_HANDLER_CHECK(ShutdownHandler, handler) type_check;
 
         async_callable<ShutdownHandler, error_code> callable(std::move(handler));
 
         if (m_impl->shutdown_handler || !m_impl->is_handshake_done)
         {
-            post(get_executor(), std::bind(callable, boost::asio::error::operation_not_supported));
+            post(get_executor(), std::bind(callable, asio::error::operation_not_supported));
             return;
         }
 
@@ -201,19 +201,19 @@ public:
     }
 
     template <typename MutableBufferSequence, typename ReadHandler>
-    BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler, void(error_code, std::size_t))
+    ASIO_INITFN_RESULT_TYPE(ReadHandler, void(error_code, std::size_t))
     async_read_some(const MutableBufferSequence& buffers, ReadHandler&& handler)
     {
         // If you get an error on the following line it means that your handler does
         // not meet the documented type requirements for a ReadHandler.
-        BOOST_ASIO_READ_HANDLER_CHECK(ReadHandler, handler) type_check;
+        ASIO_READ_HANDLER_CHECK(ReadHandler, handler) type_check;
 
         async_callable<ReadHandler, error_code, std::size_t> callable(std::move(handler));
 
         if (m_impl->read_handler)
         {
             post(get_executor(),
-                 std::bind(callable, boost::asio::error::operation_not_supported, std::size_t(0)));
+                 std::bind(callable, asio::error::operation_not_supported, std::size_t(0)));
             return;
         }
 
@@ -249,19 +249,19 @@ public:
     }
 
     template <typename ConstBufferSequence, typename WriteHandler>
-    BOOST_ASIO_INITFN_RESULT_TYPE(WriteHandler, void(error_code, std::size_t))
+    ASIO_INITFN_RESULT_TYPE(WriteHandler, void(error_code, std::size_t))
     async_write_some(const ConstBufferSequence& buffers, WriteHandler&& handler)
     {
         // If you get an error on the following line it means that your handler does
         // not meet the documented type requirements for a WriteHandler.
-        BOOST_ASIO_WRITE_HANDLER_CHECK(WriteHandler, handler) type_check;
+        ASIO_WRITE_HANDLER_CHECK(WriteHandler, handler) type_check;
 
         async_callable<WriteHandler, error_code, std::size_t> callable(std::move(handler));
 
         if (m_impl->write_handler)
         {
             post(get_executor(),
-                 std::bind(callable, boost::asio::error::operation_not_supported, std::size_t(0)));
+                 std::bind(callable, asio::error::operation_not_supported, std::size_t(0)));
             return;
         }
 
@@ -300,12 +300,12 @@ public:
     {
         error_code ec;
         handshake(type, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 
     error_code handshake(handshake_type type, error_code& ec)
     {
-        if (m_impl->is_handshake_done) return ec = boost::asio::error::operation_not_supported;
+        if (m_impl->is_handshake_done) return ec = asio::error::operation_not_supported;
 
         ensure_impl(type);
         int ret;
@@ -322,13 +322,13 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     template <typename ConstBufferSequence>
     void handshake(handshake_type type, const ConstBufferSequence& buffers)
     {
         error_code ec;
         handshake(type, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -339,12 +339,12 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void shutdown()
     {
         error_code ec;
         shutdown(ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -364,12 +364,12 @@ public:
         return ec;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     template <typename MutableBufferSequence> size_t read_some(const MutableBufferSequence& buffers)
     {
         error_code ec;
         std::size_t bytes_read = read_some(buffers, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
         return bytes_read;
     }
 #endif
@@ -379,7 +379,7 @@ public:
     {
         if (m_impl->read_handler || !m_impl->is_handshake_done)
         {
-            ec = boost::asio::error::operation_not_supported;
+            ec = asio::error::operation_not_supported;
             return 0;
         }
 
@@ -392,13 +392,13 @@ public:
         return bytes_read;
     }
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     template <typename ConstBufferSequence>
     std::size_t write_some(const ConstBufferSequence& buffers)
     {
         error_code ec;
         std::size_t bytes_written = write_some(buffers, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
         return bytes_written;
     }
 #endif
@@ -408,7 +408,7 @@ public:
     {
         if (m_impl->write_handler || !m_impl->is_handshake_done)
         {
-            ec = boost::asio::error::operation_not_supported;
+            ec = asio::error::operation_not_supported;
             return 0;
         }
 
@@ -423,12 +423,12 @@ public:
 
     // ---------- SNI extension ----------
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef NO_EXCEPTIONS
     void set_host_name(std::string const& name)
     {
         error_code ec;
         set_host_name(name, ec);
-        if (ec) boost::throw_exception(boost::system::system_error(ec));
+        if (ec) throw std::system_error(ec);
     }
 #endif
 
@@ -466,7 +466,7 @@ private:
             {}
 
             Handler handler;
-            boost::asio::async_completion<Handler, void(Args...)> completion;
+            asio::async_completion<Handler, void(Args...)> completion;
         };
 
         std::shared_ptr<impl> m_impl;
@@ -534,19 +534,19 @@ private:
 
         template <typename Function> void post(Function&& function) const
         {
-            if (parent) boost::asio::post(parent->get_executor(), std::forward<Function>(function));
+            if (parent) asio::post(parent->get_executor(), std::forward<Function>(function));
         }
 
         void abort()
         {
             if (auto handler = std::exchange(handshake_handler, nullptr))
-                handler(boost::asio::error::operation_aborted);
+                handler(asio::error::operation_aborted);
             if (auto handler = std::exchange(shutdown_handler, nullptr))
-                handler(boost::asio::error::operation_aborted);
+                handler(asio::error::operation_aborted);
             if (auto handler = std::exchange(read_handler, nullptr))
-                handler(boost::asio::error::operation_aborted, std::size_t(0));
+                handler(asio::error::operation_aborted, std::size_t(0));
             if (auto handler = std::exchange(write_handler, nullptr))
-                handler(boost::asio::error::operation_aborted, std::size_t(0));
+                handler(asio::error::operation_aborted, std::size_t(0));
         }
 
         std::string get_server_name() const
@@ -593,7 +593,7 @@ private:
 
         void handle_read(error_code ec = {})
         {
-            namespace error = boost::asio::error;
+            namespace error = asio::error;
 
             is_reading = false;
             if (read_handler)
@@ -614,7 +614,7 @@ private:
 
         void handle_write(error_code ec = {})
         {
-            namespace error = boost::asio::error;
+            namespace error = asio::error;
 
             is_writing = false;
             if (write_handler)
@@ -699,7 +699,7 @@ private:
                 if (ret < 0)
                 {
                     if (ret == GNUTLS_E_AGAIN)
-                        ec = boost::asio::error::would_block;
+                        ec = asio::error::would_block;
                     else if (ret == GNUTLS_E_PREMATURE_TERMINATION)
                         ec = error::stream_truncated;
                     else if (ret == GNUTLS_E_REHANDSHAKE && is_safe_renegotiation_enabled())
@@ -714,7 +714,7 @@ private:
 
                 if (front.size() > 0 && ret == 0)
                 {
-                    ec = boost::asio::error::eof;
+                    ec = asio::error::eof;
                     break;
                 }
 
@@ -749,7 +749,7 @@ private:
                 if (ret < 0)
                 {
                     if (ret == GNUTLS_E_AGAIN)
-                        ec = boost::asio::error::would_block;
+                        ec = asio::error::would_block;
                     else if (ret == GNUTLS_E_PREMATURE_TERMINATION)
                         ec = error::stream_truncated;
                     else if (gnutls_error_is_fatal(ret))
@@ -770,7 +770,7 @@ private:
 
         static ssize_t pull_func(void* ptr, void* buffer, std::size_t size)
         {
-            namespace error = boost::asio::error;
+            namespace error = asio::error;
 
             auto* im = static_cast<impl*>(ptr);
             if (!im->parent)
@@ -781,7 +781,7 @@ private:
 
             auto& next_layer = im->parent->m_next_layer;
             error_code ec;
-            std::size_t bytes_read = next_layer.read_some(boost::asio::buffer(buffer, size), ec);
+            std::size_t bytes_read = next_layer.read_some(asio::buffer(buffer, size), ec);
             if (ec && ec != error::eof && ec != error::connection_reset) // consider reset as close
             {
                 gnutls_transport_set_errno(
@@ -796,7 +796,7 @@ private:
 
         static ssize_t push_func(void* ptr, const void* data, std::size_t len)
         {
-            namespace error = boost::asio::error;
+            namespace error = asio::error;
 
             auto* im = static_cast<impl*>(ptr);
             if (!im->parent)
@@ -808,7 +808,7 @@ private:
             auto& next_layer = im->parent->m_next_layer;
             error_code ec;
             std::size_t bytes_written =
-                next_layer.write_some(boost::asio::const_buffer(data, len), ec);
+                next_layer.write_some(asio::const_buffer(data, len), ec);
             if (ec)
             {
                 gnutls_transport_set_errno(
@@ -914,8 +914,8 @@ private:
         std::function<void(error_code const&, std::size_t)> read_handler;
         std::function<void(error_code const&, std::size_t)> write_handler;
 
-        std::list<boost::asio::mutable_buffer> read_buffers;
-        std::list<boost::asio::const_buffer> write_buffers;
+        std::list<asio::mutable_buffer> read_buffers;
+        std::list<asio::const_buffer> write_buffers;
 
         std::size_t bytes_read = 0;
         std::size_t bytes_written = 0;
@@ -937,6 +937,6 @@ private:
 
 } // namespace gnutls
 } // namespace asio
-} // namespace boost
+
 
 #endif

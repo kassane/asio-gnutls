@@ -8,12 +8,12 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef BOOST_ASIO_GNUTLS_VERIFY_CONTEXT_HPP
-#define BOOST_ASIO_GNUTLS_VERIFY_CONTEXT_HPP
+#ifndef ASIO_GNUTLS_VERIFY_CONTEXT_HPP
+#define ASIO_GNUTLS_VERIFY_CONTEXT_HPP
 
 #include <gnutls/x509.h>
 
-namespace boost {
+
 namespace asio {
 namespace gnutls {
 
@@ -34,7 +34,7 @@ private:
 
 } // namespace gnutls
 } // namespace asio
-} // namespace boost
+
 
 #endif
 
